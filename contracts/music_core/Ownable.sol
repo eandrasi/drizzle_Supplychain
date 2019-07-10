@@ -1,5 +1,7 @@
 pragma solidity >=0.4.21 <0.6.0;
 
+import '../bloodSupChain_accessControl/AccessControl.sol';
+
 /// Provides basic authorization control
 contract Ownable {
     address private origOwner;

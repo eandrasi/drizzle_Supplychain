@@ -1,6 +1,6 @@
 pragma solidity >=0.4.21 <0.6.0;
 
-contract SupplyChain {
+contract SupplyChain is AccessControl, Ownable{
 
   address owner;
 
@@ -66,88 +66,66 @@ contract SupplyChain {
   event Packed(uint upc);
   event Stored(uint upc);
   event Administered(uint upc);
-  event Received(uint upc);
+  event Received (uint upc);
 
   // Define a modifer that checks to see if msg.sender == owner of the contract
   modifier onlyOwner() {
-    require(msg.sender == owner);
+    require(msg.sender == owner, "Only the owner can call the function");
     _;
   }
 
-  // Define a modifer that verifies the Caller
-  modifier verifyCaller (address _address) {
-    require(msg.sender == _address); 
+  // Define a modifier that checks if an item.state of a upc is Donated
+  modifier donated(uint _upc) {
+    require(items[_upc].itemState == State.Donated, "The itemState must be Donated");
     _;
   }
 
-  // Define a modifier that checks if the paid amount is sufficient to cover the price
-  modifier paidEnough(uint _price) { 
-    require(msg.value >= _price); 
+  // Define a modifier that checks if an item.state of a upc is Collected
+  modifier collected(uint _upc) {
+    require(items[_upc].itemState == State.Collected, "The itemState must be Collected");
     _;
-  }
-  
-  // Define a modifier that checks the price and refunds the remaining balance
-  modifier checkValue(uint _upc) {
-    _;
-    uint _price = items[_upc].productPrice;
-    uint amountToReturn = msg.value - _price;
-    items[_upc].consumerID.transfer(amountToReturn);
   }
 
-  // Define a modifier that checks if an item.state of a upc is Harvested
-  modifier harvested(uint _upc) {
-    require(items[_upc].itemState == State.Harvested);
+  // Define a modifier that checks if an item.state of a upc is Tested
+  modifier tested(uint _upc) {
+    require(items[_upc].itemState == State.Tested, "The itemState must be Tested");
     _;
   }
 
   // Define a modifier that checks if an item.state of a upc is Processed
   modifier processed(uint _upc) {
-
+    require(items[_upc].itemState == State.Processed, "The itemState must be Processed");
     _;
   }
-  
+
   // Define a modifier that checks if an item.state of a upc is Packed
   modifier packed(uint _upc) {
-
+    require(items[_upc].itemState == State.Packed, "The itemState must be Packed");
     _;
   }
 
-  // Define a modifier that checks if an item.state of a upc is ForSale
-  modifier forSale(uint _upc) {
-
+  // Define a modifier that checks if an item.state of a upc is Stored
+  modifier stored(uint _upc) {
+    require(items[_upc].itemState == State.Stored, "The itemState must be Stored");
     _;
   }
 
-  // Define a modifier that checks if an item.state of a upc is Sold
-  modifier sold(uint _upc) {
-
-    _;
-  }
-  
-  // Define a modifier that checks if an item.state of a upc is Shipped
-  modifier shipped(uint _upc) {
-
+  // Define a modifier that checks if an item.state of a upc is Administered
+  modifier administered(uint _upc) {
+    require(items[_upc].itemState == State.Administered, "The itemState must be Administered");
     _;
   }
 
   // Define a modifier that checks if an item.state of a upc is Received
   modifier received(uint _upc) {
-
-    _;
-  }
-
-  // Define a modifier that checks if an item.state of a upc is Purchased
-  modifier purchased(uint _upc) {
-    
+    require(items[_upc].itemState == State.Received, "The itemState must be Received");
     _;
   }
 
   // In the constructor set 'owner' to the address that instantiated the contract
-  // and set 'sku' to 1
   // and set 'upc' to 1
   constructor() public payable {
     owner = msg.sender;
-    sku = 1;
     upc = 1;
   }
 
@@ -158,16 +136,24 @@ contract SupplyChain {
     }
   }
 
-  // Define a function 'harvestItem' that allows a farmer to mark an item 'Harvested'
-  function harvestItem(uint _upc, address _originFarmerID, string memory _originFarmName, string memory _originFarmInformation,
-        string memory _originFarmLatitude, string memory _originFarmLongitude, string memory _productNotes) public
+  // Define a function 'donate' that allows a donor to mark an item 'Donated'
+  function donate(string memory _donorName, string memory _donorInformation,
+        BloodType _bloodType) public
   {
-    // Add the new item as part of Harvest
-    
-    // Increment sku
-    sku = sku + 1;
+    Item memory newItem;
+
+    newItem.upc = upc;
+    newItem.ownerID = msg.sender;
+    newItem.donorID = msg.sender;
+    newItem.donorName = _donorName;
+    newItem.donorInformation = _donorInformation;
+    newItem.bloodType = _bloodType;
+    newItem.itemState = State.Donated;
+
     // Emit the appropriate event
-    
+    emit Donated(upc);
+
+    upc = upc + 1;
   }
 
   // Define a function 'processtItem' that allows a farmer to mark an item 'Processed'
