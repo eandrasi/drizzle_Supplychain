@@ -1,11 +1,13 @@
-// const SimpleStorage = artifacts.require("SimpleStorage");
-// const TutorialToken = artifacts.require("TutorialToken");
-// const ComplexStorage = artifacts.require("ComplexStorage");
-var ArtistRole = artifacts.require("ArtistRole")
+const DonorRole = artifacts.require("DonorRole");
+const HospitalRole = artifacts.require("HospitalRole");
+const PatientRole = artifacts.require("PatientRole");
+const ProcessingCenterRole = artifacts.require("ProcessingCenterRole")
+const SupplyChain = artifacts.require("SupplyChain")
 
 module.exports = function(deployer) {
-  deployer.deploy(ArtistRole);
-  // deployer.deploy(SimpleStorage);
-  // deployer.deploy(TutorialToken);
-  // deployer.deploy(ComplexStorage);
+  deployer.deploy(DonorRole);
+  deployer.deploy(HospitalRole);
+  deployer.deploy(PatientRole);
+  deployer.deploy(ProcessingCenterRole);
+  deployer.deploy(SupplyChain);
 };
