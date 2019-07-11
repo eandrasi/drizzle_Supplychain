@@ -6,5 +6,7 @@ import './PatientRole.sol';
 import './ProcessingCenterRole.sol';
 
 contract AccessControl is DonorRole, HospitalRole, PatientRole, ProcessingCenterRole {
-    constructor() public {}
+    constructor() public {
+        
+    }
 }
