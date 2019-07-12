@@ -5,7 +5,7 @@ import '../bloodSupChain_core/Ownable.sol';
 
 contract SupplyChain is AccessControl, Ownable{
 
-  address owner;
+  // address owner;
 
   // Define a variable called 'upc' for Universal Product Code (UPC)
   uint  upc;
@@ -18,18 +18,20 @@ contract SupplyChain is AccessControl, Ownable{
 
   // Define a public mapping 'itemsHistory' that maps the UPC to an array of TxHash,
   // that track its journey through the supply chain -- to be sent from DApp.
-  mapping (uint => BloodHistory) itemsHistory;
+  // mapping (uint => BloodHistory) itemsHistory;
+  // mapping (uint => string[]) itemsHistory;
+  mapping (uint => mapping(uint => string)) itemsHistoryMap;
 
-  struct BloodHistory {
-    string Donated;
-    string Collected;
-    string Tested;
-    string Processed;
-    string Packed;
-    string Stored;
-    string Administered;
-    string Received;
-  }
+  // struct BloodHistory {
+  //   string Donated;
+  //   string Collected;
+  //   string Tested;
+  //   string Processed;
+  //   string Packed;
+  //   string Stored;
+  //   string Administered;
+  //   string Received;
+  // }
 
 
   // Define enum 'State' with the following values:
@@ -72,9 +74,6 @@ contract SupplyChain is AccessControl, Ownable{
     address patientID; // Metamask-Ethereum address of the Patient
   }
 
-
-
-
   // Define 8 events with the same 8 state values and accept 'upc' as input argument
   event Donated(uint upc);
   event Collected(uint upc);
@@ -87,7 +86,7 @@ contract SupplyChain is AccessControl, Ownable{
 
   // Define a modifer that checks to see if msg.sender == owner of the contract
   modifier onlyOwner() {
-    require(msg.sender == owner, "Only the owner can call the function");
+    require(msg.sender == owner(), "Only the owner can call the function");
     _;
   }
 
@@ -160,13 +159,13 @@ contract SupplyChain is AccessControl, Ownable{
   // In the constructor set 'owner' to the address that instantiated the contract
   // and set 'upc' to 1
   constructor() public payable {
-    owner = msg.sender;
+    // owner = msg.sender;
     upc = 1;
   }
 
   // Define a function 'kill' if required
   function kill() public {
-    if (msg.sender == owner) {
+    if (msg.sender == owner()) {
       selfdestruct(msg.sender);
     }
   }
@@ -238,58 +237,66 @@ contract SupplyChain is AccessControl, Ownable{
     emit Administered(upc);
   }
 
-  // Functions to set and get the TxHistory
-  function setTxDonated(uint _upc, string memory txHash) public onlyOwner onlyDonor {
-    itemsHistory[_upc].Donated = txHash;
-  }
+  // // Functions to set and get the TxHistory
+  // function setTxDonated(uint _upc, string memory txHash) public onlyOwner onlyDonor {
+  //   itemsHistory[_upc].Donated = txHash;
+  // }
 
-  function setTxCollected(uint _upc, string memory txHash) public onlyOwner onlyProcessingCenter {
-    itemsHistory[_upc].Collected = txHash;
-  }
+  // function setTxCollected(uint _upc, string memory txHash) public onlyOwner onlyProcessingCenter {
+  //   itemsHistory[_upc].Collected = txHash;
+  // }
 
-  function setTxTested(uint _upc, string memory txHash) public onlyOwner onlyProcessingCenter {
-    itemsHistory[_upc].Tested = txHash;
-  }
+  // function setTxTested(uint _upc, string memory txHash) public onlyOwner onlyProcessingCenter {
+  //   itemsHistory[_upc].Tested = txHash;
+  // }
 
-  function setTxProcessed(uint _upc, string memory txHash) public onlyOwner onlyProcessingCenter {
-    itemsHistory[_upc].Processed = txHash;
-  }
+  // function setTxProcessed(uint _upc, string memory txHash) public onlyOwner onlyProcessingCenter {
+  //   itemsHistory[_upc].Processed = txHash;
+  // }
 
-  function setTxPacked(uint _upc, string memory txHash) public onlyOwner onlyProcessingCenter {
-    itemsHistory[_upc].Packed = txHash;
-  }
+  // function setTxPacked(uint _upc, string memory txHash) public onlyOwner onlyProcessingCenter {
+  //   itemsHistory[_upc].Packed = txHash;
+  // }
 
-  function setTxStored(uint _upc, string memory txHash) public onlyOwner onlyHospital {
-    itemsHistory[_upc].Stored = txHash;
-  }
+  // function setTxStored(uint _upc, string memory txHash) public onlyOwner onlyHospital {
+  //   itemsHistory[_upc].Stored = txHash;
+  // }
 
-  function setTxAdministered(uint _upc, string memory txHash) public onlyOwner onlyHospital {
-    itemsHistory[_upc].Administered = txHash;
-  }
+  // function setTxAdministered(uint _upc, string memory txHash) public onlyOwner onlyHospital {
+  //   itemsHistory[_upc].Administered = txHash;
+  // }
 
-  function setTxReceived(uint _upc, string memory txHash) public onlyOwner onlyPatient {
-    itemsHistory[_upc].Received = txHash;
-  }
+  // function setTxReceived(uint _upc, string memory txHash) public onlyOwner onlyPatient {
+  //   itemsHistory[_upc].Received = txHash;
+  // }
 
-  function getHistory(uint _upc) public view returns (
-    string memory _donated,
-    string memory _collected,
-    string memory _tested,
-    string memory _processed,
-    string memory _packed,
-    string memory _stored,
-    string memory _administered,
-    string memory _received
-  ) {
-    _donated = itemsHistory[_upc].Donated;
-    _collected = itemsHistory[_upc].Collected;
-    _tested = itemsHistory[_upc].Tested;
-    _processed = itemsHistory[_upc].Processed;
-    _packed = itemsHistory[_upc].Packed;
-    _stored = itemsHistory[_upc].Stored;
-    _administered = itemsHistory[_upc].Administered;
-    _received = itemsHistory[_upc].Received;
-  }
+  // function getHistory(uint _upc) public view returns (
+  //   string memory _donated,
+  //   string memory _collected,
+  //   string memory _tested,
+  //   string memory _processed,
+  //   string memory _packed,
+  //   string memory _stored,
+  //   string memory _administered,
+  //   string memory _received
+  // ) {
+  //   _donated = itemsHistory[_upc].Donated;
+  //   _collected = itemsHistory[_upc].Collected;
+  //   _tested = itemsHistory[_upc].Tested;
+  //   _processed = itemsHistory[_upc].Processed;
+  //   _packed = itemsHistory[_upc].Packed;
+  //   _stored = itemsHistory[_upc].Stored;
+  //   _administered = itemsHistory[_upc].Administered;
+  //   _received = itemsHistory[_upc].Received;
+  // }
+
+  function setHistory(uint item, uint pos, string memory s) public {
+        itemsHistoryMap[item][pos] = s;
+    }
+
+    function getHistory(uint item, uint pos) public view returns (string memory val){
+        val = itemsHistoryMap[item][pos];
+    }
 
   // function to get detailed information about one item
   function getDetails(uint _upc) public view returns (
