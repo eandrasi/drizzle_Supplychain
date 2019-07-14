@@ -170,9 +170,14 @@ contract SupplyChain is AccessControl, Ownable{
     }
   }
 
+  function transfer(address newOwner, uint _upc) public onlyOwner {
+    transferOwnership(newOwner);
+    items[_upc].ownerID = newOwner;
+  }
+
   // Define a function 'donate' that allows a donor to mark an item 'Donated'
   function donate(string memory _donorName, string memory _donorInformation,
-        BloodType _bloodType) public
+        BloodType _bloodType) public onlyOwner
   {
     Item memory newItem;
 
@@ -194,47 +199,48 @@ contract SupplyChain is AccessControl, Ownable{
 
   // Define a function 'collect' that allows a ProcessingCenter to mark an item 'Collected'
   function collect(uint _upc) public donated(_upc) onlyProcessingCenter {
-    items[upc].ownerID = msg.sender;
-    items[upc].processingCenterID = msg.sender;
-    items[upc].itemState = State.Collected;
+    items[_upc].processingCenterID = msg.sender;
+    items[_upc].itemState = State.Collected;
 
     emit Collected(upc);
   }
 
   function test(uint _upc) public collected(_upc) onlyProcessingCenter {
-    items[upc].itemState = State.Tested;
+    items[_upc].itemState = State.Tested;
 
     emit Tested(upc);
   }
 
   function process(uint _upc) public tested(_upc) onlyProcessingCenter {
-    items[upc].itemState = State.Processed;
+    items[_upc].itemState = State.Processed;
 
     emit Processed(upc);
   }
 
   function pack(uint _upc) public processed(_upc) onlyProcessingCenter {
-    items[upc].itemState = State.Packed;
+    items[_upc].itemState = State.Packed;
 
     emit Packed(upc);
   }
 
   function store(uint _upc) public packed(_upc) onlyHospital {
-    items[upc].itemState = State.Stored;
+    items[_upc].hospitalID = msg.sender;
+    items[_upc].itemState = State.Stored;
 
     emit Stored(upc);
   }
 
   function administer(uint _upc) public stored(_upc) onlyHospital {
-    items[upc].itemState = State.Administered;
+    items[_upc].itemState = State.Administered;
 
     emit Administered(upc);
   }
 
   function receive(uint _upc) public administered(_upc) onlyPatient {
-    items[upc].itemState = State.Received;
+    items[_upc].patientID = msg.sender;
+    items[_upc].itemState = State.Received;
 
-    emit Administered(upc);
+    emit Received(upc);
   }
 
   // // Functions to set and get the TxHistory
@@ -294,8 +300,14 @@ contract SupplyChain is AccessControl, Ownable{
         itemsHistoryMap[item][pos] = s;
     }
 
-    function getHistory(uint item, uint pos) public view returns (string memory val){
-        val = itemsHistoryMap[item][pos];
+    function getHistory(uint item) public view
+    returns (string memory donateTx, string memory toPcTx, string memory toHospitalTx,
+              string memory toPatientTx, string memory receivedTx){
+        donateTx = itemsHistoryMap[item][0];
+        toPcTx = itemsHistoryMap[item][1];
+        toHospitalTx = itemsHistoryMap[item][2];
+        toPatientTx = itemsHistoryMap[item][3];
+        receivedTx = itemsHistoryMap[item][4];
     }
 
   // function to get detailed information about one item
