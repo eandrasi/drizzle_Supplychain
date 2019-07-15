@@ -10,7 +10,7 @@ import MyContainer from "./MyContainer";
 class App extends Component {
   render() {
     return (
-      <DrizzleProvider options={drizzleOptions}>
+      <DrizzleProvider options={drizzleOptions}> 
         <LoadingContainer>
           <MyContainer />
         </LoadingContainer>
