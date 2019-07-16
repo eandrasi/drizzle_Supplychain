@@ -6,7 +6,8 @@ The smart contract should be used together with a Factory type of smart contract
 
 The DApp User Interface allows you to register the different roles needed for this demonstration and then move through the different stages of the entire Supply-chain.
 
-
+## Diagrams and mockup 
+[Draw.io activity diagram, sequence diagram, state diagram, data modeling diagram and webPage mockup](https://drive.google.com/file/d/1l006GcTabdrCR-6PL4T1Txl3TBBRmggF/view?usp=sharing)
 
 ## Donor Functions
 The donor can initiate the process by sending a transaction containing his name, some information like a Donor-Card serial number and the blood type.
