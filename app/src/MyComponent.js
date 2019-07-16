@@ -7,9 +7,16 @@ import {
 
 import logo from  "./logo.png";
 
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+
+
+
+
 export default ({ accounts }) => (
   // <div className="App">
   <div className="App">
+    <ToastContainer />
     <div>
       <h1>Blood Donation Supply Chain</h1>
       <p>Track blood donation with blockchain</p>
