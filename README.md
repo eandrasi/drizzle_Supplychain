@@ -31,21 +31,22 @@ Throwout the life-cycle the changes in history and item information can be obser
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 
 ## Prerequisites
-Please make sure you've already installed ganache-cli, Truffle and enabled MetaMask extension in your browser.
+Please make sure you've already installed ganache (and running on port 9545), Truffle and enabled MetaMask extension in your browser.
 
 
 ## Installing
 
-Clone this repository: `https://github.com/eandrasi/drizzle_Supplychain`
-Install using `npm install`
-Launch Ganache
-In a separate terminal window, Compile smart contracts: `truffle compile`
-Migrate smart contracts to the locally running blockchain, ganache-cli: `truffle migrate --reset`
-Test the smart-contracts `truffle test`
-All tests should pass
-In a separate terminal window, launch the DApp:
-`cd app`
-`npm start`
++ Clone this repository: `https://github.com/eandrasi/drizzle_Supplychain`
++ Install using `npm install`
++ Launch Ganache
++ In a terminal window run `truffle develop` 
++ Compile smart contracts: `compile`
++ Migrate smart contracts to the locally running blockchain, ganache-cli: `migrate --reset`
++ Test the smart-contracts `test`
++ All tests should pass
++ In a separate terminal window, open the app folder `cd app`
++ Install the dependencies `npm install`
++ run the Dapp `npm start`
 
 
 # Built With
