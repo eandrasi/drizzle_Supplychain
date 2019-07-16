@@ -8,6 +8,8 @@ const contractEventNotifier = store => next => action => {
       const contractEvent = action.event.event
       const message = action.event.returnValues._message
       const display = `${contract}(${contractEvent}): ${message}`
+
+      console.log(action.event)
   
       toast.success(display, { position: toast.POSITION.TOP_RIGHT })
     }

@@ -198,49 +198,49 @@ contract SupplyChain is AccessControl, Ownable{
   }
 
   // Define a function 'collect' that allows a ProcessingCenter to mark an item 'Collected'
-  function collect(uint _upc) public donated(_upc) onlyProcessingCenter {
+  function collect(uint _upc) public donated(_upc) onlyProcessingCenter onlyOwner {
     items[_upc].processingCenterID = msg.sender;
     items[_upc].itemState = State.Collected;
 
-    emit Collected(upc);
+    emit Collected(_upc);
   }
 
-  function test(uint _upc) public collected(_upc) onlyProcessingCenter {
+  function test(uint _upc) public collected(_upc) onlyProcessingCenter onlyOwner {
     items[_upc].itemState = State.Tested;
 
-    emit Tested(upc);
+    emit Tested(_upc);
   }
 
-  function process(uint _upc) public tested(_upc) onlyProcessingCenter {
+  function process(uint _upc) public tested(_upc) onlyProcessingCenter onlyOwner {
     items[_upc].itemState = State.Processed;
 
-    emit Processed(upc);
+    emit Processed(_upc);
   }
 
-  function pack(uint _upc) public processed(_upc) onlyProcessingCenter {
+  function pack(uint _upc) public processed(_upc) onlyProcessingCenter onlyOwner {
     items[_upc].itemState = State.Packed;
 
-    emit Packed(upc);
+    emit Packed(_upc);
   }
 
-  function store(uint _upc) public packed(_upc) onlyHospital {
+  function store(uint _upc) public packed(_upc) onlyHospital onlyOwner {
     items[_upc].hospitalID = msg.sender;
     items[_upc].itemState = State.Stored;
 
-    emit Stored(upc);
+    emit Stored(_upc);
   }
 
-  function administer(uint _upc) public stored(_upc) onlyHospital {
+  function administer(uint _upc) public stored(_upc) onlyHospital onlyOwner {
     items[_upc].itemState = State.Administered;
 
-    emit Administered(upc);
+    emit Administered(_upc);
   }
 
-  function receive(uint _upc) public administered(_upc) onlyPatient {
+  function receive(uint _upc) public administered(_upc) onlyPatient onlyOwner {
     items[_upc].patientID = msg.sender;
     items[_upc].itemState = State.Received;
 
-    emit Received(upc);
+    emit Received(_upc);
   }
 
   // // Functions to set and get the TxHistory
