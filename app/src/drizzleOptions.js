@@ -22,7 +22,12 @@ const options = {
       "Packed",
       "Stored",
       "Administered",
-      "Received"
+      "Received",
+      "TransferOwnership",
+      "DonorAdded",
+      "PatientAdded",
+      "HospitalAdded",
+      "ProcessingCenterAdded"
     ],
   },
   polls: {
